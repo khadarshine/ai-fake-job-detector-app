@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { useRouter } from '../context/RouterContext';
 import { parseFileContent } from '../services/parser';
@@ -18,6 +18,14 @@ export const Detector: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleTriggerDemo = () => {
+      handlePasteDemo('scam');
+    };
+    window.addEventListener('trigger-demo-scan', handleTriggerDemo);
+    return () => window.removeEventListener('trigger-demo-scan', handleTriggerDemo);
+  }, []);
 
   const handleTabChange = (tab: 'text' | 'file' | 'url') => {
     setActiveTab(tab);
@@ -220,16 +228,10 @@ To apply, please submit your cover letter and link to GitHub portfolio at our of
   // Input Config View
   return (
     <div className="container animate-slide-up" style={{ padding: '40px 24px', maxWidth: '900px' }}>
-      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '12px' }}>Safety Scanner Sandbox</h1>
-        <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
-          Evaluate job advertisements, emails, or chat logs for fraudulent patterns. Scan files, URLs, or paste raw text below.
-        </p>
-      </div>
 
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: '3fr 1.2fr',
+        display: 'flex',
+        flexDirection: 'column',
         gap: '32px'
       }} className="detector-split-grid">
         
@@ -379,13 +381,13 @@ To apply, please submit your cover letter and link to GitHub portfolio at our of
               className="btn btn-primary"
               style={{ width: '100%', marginTop: '24px', padding: '14px', borderRadius: '12px', gap: '10px' }}
             >
-              <RefreshCw size={18} /> Run Job Security Check
+              <RefreshCw size={18} /> Analyze Job Offer
             </button>
           </div>
         </div>
 
-        {/* Info / Quick Demos Sidebar */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        {/* Info / Quick Demos Sidebar (Moved Below) */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
           <div className="glass-panel" style={{ padding: '24px' }}>
             <h3 style={{ fontSize: '1rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               🔬 Test Cases

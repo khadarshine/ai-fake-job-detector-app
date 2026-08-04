@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from '../context/RouterContext';
 import { useApp } from '../context/AppContext';
-import { Menu, X, Moon, Sun, ShieldCheck } from 'lucide-react';
+import { Menu, X, Moon, Sun, ShieldCheck, Settings, Home, Shield, BarChart2, History, HelpCircle } from 'lucide-react';
+
+const GithubIcon = ({ size = 24, className }: { size?: number, className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3-.3 6-1.5 6-6.5a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 5 3 6.2 6 6.5a4.8 4.8 0 0 0-1 3.2v4"></path>
+  </svg>
+);
 
 export const Navbar: React.FC = () => {
   const { currentPath, navigate } = useRouter();
@@ -9,14 +15,29 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { label: 'Scanner', path: '/detector' },
-    { label: 'Analytics', path: '/analytics' },
-    { label: 'History', path: '/history' },
-    { label: 'FAQ', path: '/faq' },
+    { label: 'Home', path: '/', icon: Home },
+    { label: 'Scanner', path: '/#scanner', icon: Shield },
+    { label: 'Analytics', path: '/analytics', icon: BarChart2 },
+    { label: 'History', path: '/history', icon: History },
+    { label: 'FAQ', path: '/faq', icon: HelpCircle },
   ];
 
   const handleNav = (path: string) => {
-    navigate(path);
+    if (path.startsWith('/#')) {
+      const targetId = path.substring(2);
+      if (currentPath !== '/') {
+        navigate('/');
+        setTimeout(() => {
+          const el = document.getElementById(targetId);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      } else {
+        const el = document.getElementById(targetId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate(path);
+    }
     setMobileMenuOpen(false);
   };
 
@@ -55,13 +76,13 @@ export const Navbar: React.FC = () => {
             strokeWidth="2" 
             strokeLinecap="round" 
             strokeLinejoin="round"
-            style={{ filter: 'drop-shadow(0 2px 8px rgba(6, 182, 212, 0.25))' }}
+            style={{ filter: 'drop-shadow(0 2px 8px rgba(99, 102, 241, 0.25))' }}
           >
             <defs>
               <linearGradient id="logo-icon-gradient-nav" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#10b981" />
-                <stop offset="50%" stopColor="#06b6d4" />
-                <stop offset="100%" stopColor="#6366f1" />
+                <stop offset="0%" stopColor="#6366f1" />
+                <stop offset="50%" stopColor="#8b5cf6" />
+                <stop offset="100%" stopColor="#ec4899" />
               </linearGradient>
             </defs>
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="url(#logo-icon-gradient-nav)" />
@@ -73,7 +94,7 @@ export const Navbar: React.FC = () => {
             fontWeight: 800,
             fontSize: '1.25rem',
             letterSpacing: '-0.02em',
-            background: 'linear-gradient(135deg, #10b981 0%, #06b6d4 40%, #6366f1 100%)',
+            background: 'var(--gradient-primary)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             display: 'inline-block'
@@ -91,6 +112,7 @@ export const Navbar: React.FC = () => {
         }} className="desktop-only">
           {navItems.map(item => {
             const isActive = currentPath === item.path;
+            const Icon = item.icon;
             return (
               <button
                 key={item.path}
@@ -104,7 +126,10 @@ export const Navbar: React.FC = () => {
                   padding: '8px 12px',
                   borderRadius: 'var(--radius-sm)',
                   background: isActive ? 'rgba(99, 102, 241, 0.08)' : 'transparent',
-                  transition: 'all var(--transition-fast)'
+                  transition: 'all var(--transition-fast)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) e.currentTarget.style.color = 'var(--text-primary)';
@@ -113,6 +138,7 @@ export const Navbar: React.FC = () => {
                   if (!isActive) e.currentTarget.style.color = 'var(--text-secondary)';
                 }}
               >
+                <Icon size={16} />
                 {item.label}
               </button>
             );
@@ -140,12 +166,23 @@ export const Navbar: React.FC = () => {
             <span className="tooltip">Configure API settings</span>
           </div>
 
+          {/* Github Link */}
+          <button
+            onClick={() => window.open('https://github.com/aravindsubhashpuvvada-dot/ai-fake-job-detector-app.git', '_blank')}
+            className="btn-secondary btn-icon-only flex-center glass-panel-hover"
+            style={{ width: '40px', height: '40px', borderRadius: '12px' }}
+            title="View Open Source Project"
+          >
+            <GithubIcon size={18} />
+          </button>
+
           {/* Theme Switcher */}
           <button
             onClick={toggleTheme}
-            className="btn-secondary btn-icon-only flex-center"
+            className="btn-secondary btn-icon-only flex-center glass-panel-hover"
             style={{ width: '40px', height: '40px', borderRadius: '12px' }}
             aria-label="Toggle Theme"
+            title="Toggle Theme"
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -153,10 +190,11 @@ export const Navbar: React.FC = () => {
           {/* Settings Shortcut */}
           <button
             onClick={() => handleNav('/settings')}
-            className="btn btn-secondary desktop-only"
-            style={{ fontSize: '0.85rem', padding: '8px 16px', borderRadius: '12px' }}
+            className="btn-secondary btn-icon-only flex-center desktop-only glass-panel-hover"
+            style={{ width: '40px', height: '40px', borderRadius: '12px' }}
+            title="Settings"
           >
-            Settings
+            <Settings size={18} />
           </button>
 
           {/* Mobile Menu Toggle */}
@@ -187,23 +225,30 @@ export const Navbar: React.FC = () => {
           gap: '12px',
           zIndex: 99
         }}>
-          {navItems.map(item => (
-            <button
-              key={item.path}
-              onClick={() => handleNav(item.path)}
-              style={{
-                textAlign: 'left',
-                padding: '12px 16px',
-                borderRadius: 'var(--radius-sm)',
-                fontWeight: 600,
-                color: currentPath === item.path ? 'var(--color-primary-light)' : 'var(--text-primary)',
-                background: currentPath === item.path ? 'rgba(99, 102, 241, 0.08)' : 'transparent',
-                width: '100%'
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
+          {navItems.map(item => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.path}
+                onClick={() => handleNav(item.path)}
+                style={{
+                  textAlign: 'left',
+                  padding: '12px 16px',
+                  borderRadius: 'var(--radius-sm)',
+                  fontWeight: 600,
+                  color: currentPath === item.path ? 'var(--color-primary-light)' : 'var(--text-primary)',
+                  background: currentPath === item.path ? 'rgba(99, 102, 241, 0.08)' : 'transparent',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}
+              >
+                <Icon size={18} />
+                {item.label}
+              </button>
+            );
+          })}
           <div style={{ height: '1px', background: 'var(--border-color)', margin: '4px 0' }} />
           <button
             onClick={() => handleNav('/settings')}

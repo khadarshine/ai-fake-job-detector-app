@@ -147,7 +147,7 @@ export const Contact: React.FC = () => {
               <Globe size={18} style={{ color: 'var(--color-primary-light)', flexShrink: 0 }} />
               <div>
                 <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>GitHub Repo</div>
-                <div style={{ color: 'var(--text-secondary)' }}>github.com/jobshield/ai-detector</div>
+                <div style={{ color: 'var(--text-secondary)' }}>github.com/aravindsubhashpuvvada-dot/ai-fake-job-detector-app.git</div>
               </div>
             </div>
           </div>
