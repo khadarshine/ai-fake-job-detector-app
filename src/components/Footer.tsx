@@ -51,7 +51,7 @@ export const Footer: React.FC = () => {
           gap: '40px',
           marginBottom: '60px'
         }} className="footer-grid">
-          
+
           {/* Column 1: Project Information */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -147,7 +147,7 @@ export const Footer: React.FC = () => {
           color: 'var(--text-muted)'
         }}>
           <div>
-            &copy; 2026 AI Fake Job Detector. All rights reserved.
+            &copy; 2026 AI Fake Job Detector. All rights reserved - Aravind Subhash Puvvada.
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             Built with <Heart size={14} style={{ color: '#ef4444', fill: '#ef4444' }} /> for students, job seekers, and the open-source community.
